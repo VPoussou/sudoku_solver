@@ -1,27 +1,10 @@
 import numpy
-
-grid = numpy.array([[0, 0, 6, 5, 3, 0, 0, 1, 0],
-					[0, 0, 0, 0, 2, 0, 5, 0, 4],
-					[2, 0, 0, 0, 0, 0, 0, 0, 0],
-					[0, 0, 0, 0, 8, 0, 3, 4, 2],
-					[0, 0, 0, 9, 0, 3, 0, 0, 0],
-					[6, 3, 1, 0, 4, 0, 0, 0, 0],
-					[0, 0, 0, 0, 0, 0, 0, 0, 7],
-					[8, 0, 4, 0, 6, 0, 0, 0, 0],
-					[0, 6, 0, 0, 7, 1, 8, 0, 0]])
-
-
-# Etapes 1 : Création de la classe SudokuSolver
-
-# Etape 2 : Création d'une méthode d'instance : is_number_valid(row, col, number) -> True or False
-
-# Etape 3 : Création d'une méthode d'instance Solve() : 
-
+import copy
 
 class SudokuSolver:
 	def __init__(self, grid):
 		self.grid = grid
-		self.solution = None
+		self.solutions = []
 
 	def is_number_valid(self, row, col, number):
 
@@ -40,3 +23,40 @@ class SudokuSolver:
 		# number_is_valid = not in_row and not in_col and not in_square
 		
 		return number_is_valid
+
+
+
+	def solve(self):
+		for row in range(0, 9):
+			for col in range(0, 9):
+				if self.grid[row][col] == 0 :
+					for number in range(1, 10):
+						if self.is_number_valid(row, col, number):
+							self.grid[row][col] = number
+							print(self.grid)
+							print("_"*30)
+							self.solve()
+							self.grid[row][col] = 0
+
+					return None
+
+		else:
+			self.solutions.append(copy.deepcopy(self.grid))
+
+
+if __name__ == '__main__':
+	grid = numpy.array([[0, 0, 6, 5, 3, 0, 0, 1, 0],
+						[0, 0, 0, 0, 2, 0, 5, 0, 4],
+						[2, 0, 0, 0, 0, 0, 0, 0, 0],
+						[0, 0, 0, 0, 8, 0, 3, 4, 2],
+						[0, 0, 0, 9, 0, 3, 0, 0, 0],
+						[6, 3, 1, 0, 4, 0, 0, 0, 0],
+						[0, 0, 0, 0, 0, 0, 0, 0, 7],
+						[8, 0, 4, 0, 6, 0, 0, 0, 0],
+						[0, 6, 0, 0, 7, 1, 8, 0, 0]]) 
+
+	sudoku_object = SudokuSolver(grid)
+	sudoku_object.solve()
+	# for solution in sudoku_object.solutions:
+	# 	print(solution)
+	# 	print("_"*50)
